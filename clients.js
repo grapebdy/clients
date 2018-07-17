@@ -26,8 +26,10 @@ function heartbit(data, callback) {
 	}, function(err, res, body) {
 		if (!err && res.statusCode == 200) {
 			console.log(body.sn + " : " + body.ip);
+			callback(null, body);
 		} else {
 			console.log("responce error ");
+			callback("responce err", null);
 		}
 	});
 }
@@ -55,12 +57,24 @@ function gpt_getip(callback) {
 	});
 }
 
+function gpt_test(callback) {
+	cmd_exec("date", function(stderr, stdout) {
+		if (stderr == null) {
+			var data = stdout.split('\n')[0];
+			console.log("main: " + data);
+			callback(null, data);
+		} else {
+			callback(stderr, null);
+		}
+	});
+}
 function main() {
 	var record = {};
 
 	async.series({
 		sn: gpt_getsn,
 		ip: gpt_getip,
+		test: gpt_test,
 	}, function(err, result) {
 		if (err) {
 			console.log("failed");
@@ -72,10 +86,11 @@ function main() {
 					console.log(err);
 				} else {
 					console.log("success");
+					setTimeout(main, 3000);
 				}
 			});
 		}
 	});
 
 }
-main();
+exports.main = main;
