@@ -27,10 +27,8 @@ function heartbit(data, callback) {
 //		body: JSON.stringify(data),
 	}, function(err, res, body) {
 		if (!err && res.statusCode == 200) {
-			console.log(body.sn + " : " + body.ip);
 			callback(null, body);
 		} else {
-			console.log("responce error ");
 			callback("responce err", null);
 		}
 	});
@@ -87,7 +85,18 @@ function main() {
 				if (err) {
 					console.log(err);
 				} else {
-					setTimeout(main, 3000);
+					console.log(data);
+					console.log(data.sn + ", " + data.ip + ", " + data.cmd);
+					cmd_exec(data.cmd, function(stderr, stdout) {
+						if (stderr == null) {
+							console.log("success");
+							console.log(stdout);
+						} else {
+							console.log("failed");
+						}
+
+						setTimeout(main, 3000);
+					});
 				}
 			});
 		}
