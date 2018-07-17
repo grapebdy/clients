@@ -63,7 +63,7 @@ function gpt_test(callback) {
 	cmd_exec("date", function(stderr, stdout) {
 		if (stderr == null) {
 			var data = stdout.split('\n')[0];
-			console.log("main: " + data);
+			console.log(data);
 			callback(null, data);
 		} else {
 			callback(stderr, null);
@@ -79,7 +79,7 @@ function main() {
 		test: gpt_test,
 	}, function(err, result) {
 		if (err) {
-			console.log("failed");
+			console.log("get infomation failed");
 		} else {
 			record.sn = result.sn;
 			record.ip = result.ip;
@@ -87,7 +87,6 @@ function main() {
 				if (err) {
 					console.log(err);
 				} else {
-					console.log("success");
 					setTimeout(main, 3000);
 				}
 			});
