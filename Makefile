@@ -18,7 +18,7 @@ bin/%: bin/%.o
 bin/%.o: tools/%.c
 	$(CC)  -c -o $@ $<
 
-run:
+run: tools
 	@./bin/start
 
 clean:
