@@ -3,6 +3,8 @@ var async = require('async');
 var request = require('request');
 var exec = require('child_process').exec;
 
+var netinterface = "wlp5s0";
+
 function cmd_exec(cmd, callback) {
 	exec(cmd, {maxBuffer:1024*1920}, function (err, stdout, stderr) {
 		if (err) {
@@ -35,7 +37,7 @@ function heartbit(data, callback) {
 }
 
 function gpt_getsn(callback) {
-	cmd_exec("echo 12345678", function(stderr, stdout) {
+	cmd_exec("bin/netiface -m", function(stderr, stdout) {
 		if (stderr == null) {
 			var data = stdout.split('\n')[0];
 			callback(null, data);
@@ -46,7 +48,7 @@ function gpt_getsn(callback) {
 }
 
 function gpt_getip(callback) {
-	cmd_exec("echo 192.168.1.1", function(stderr, stdout) {
+	cmd_exec("bin/netiface -i", function(stderr, stdout) {
 		if (stderr == null) {
 			var data = stdout.split('\n')[0];
 			callback(null, data);
