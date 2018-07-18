@@ -68,6 +68,30 @@ function gpt_test(callback) {
 	});
 }
 
+function run_cmds(cmd, callback) {
+	if (cmd == null) {
+		callback();
+		return;
+	}
+	if (cmd == "ls") {
+		cmd_exec(cmd, function(stderr, stdout) {
+			if (stderr != null) {
+				callback("failed", stdout);
+			} else {
+				callback("pass", stdout);
+			}
+		});
+	} else {
+		cmd_exec(cmd, function(stderr, stdout) {
+			if (stderr != null) {
+				callback(cmd + " failed", stdout);
+			} else {
+				callback(null, null);
+			}
+		});
+	}
+}
+
 function main() {
 	var record = {};
 
@@ -87,14 +111,9 @@ function main() {
 					setTimeout(main, 5000);
 				} else {
 					console.log(data);
-					console.log(data.sn + ", " + data.ip + ", " + data.cmd);
-					cmd_exec(data.cmd, function(stderr, stdout) {
-						if (stderr == null) {
-							console.log("success");
+					run_cmds(data.cmd, function(stderr, stdout) {
+						if (stderr != null)
 							console.log(stdout);
-						} else {
-							console.log("failed");
-						}
 
 						setTimeout(main, 3000);
 					});
@@ -102,6 +121,5 @@ function main() {
 			});
 		}
 	});
-
 }
 exports.main = main;
