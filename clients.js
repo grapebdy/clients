@@ -3,8 +3,6 @@ var async = require('async');
 var request = require('request');
 var exec = require('child_process').exec;
 
-var netinterface = "wlp5s0";
-
 function cmd_exec(cmd, callback) {
 	exec(cmd, {maxBuffer:1024*1920}, function (err, stdout, stderr) {
 		if (err) {
@@ -17,7 +15,8 @@ function cmd_exec(cmd, callback) {
 
 function heartbit(data, callback) {
 	request({
-		uri: "http://localhost:9000/users/test",
+//		uri: "http://manage-center:9000/users/test",
+		uri: "http://" + global.config.serverip +":" + global.config.port + "/users/test",
 		method: "POST",
 		json: true,
 		headers: {
@@ -35,7 +34,7 @@ function heartbit(data, callback) {
 }
 
 function gpt_getsn(callback) {
-	cmd_exec("bin/netiface -m", function(stderr, stdout) {
+	cmd_exec("bin/netiface -m -d" + global.config.netdev, function(stderr, stdout) {
 		if (stderr == null) {
 			var data = stdout.split('\n')[0];
 			callback(null, data);
@@ -46,7 +45,7 @@ function gpt_getsn(callback) {
 }
 
 function gpt_getip(callback) {
-	cmd_exec("bin/netiface -i", function(stderr, stdout) {
+	cmd_exec("bin/netiface -i -d" + global.config.netdev, function(stderr, stdout) {
 		if (stderr == null) {
 			var data = stdout.split('\n')[0];
 			callback(null, data);
@@ -68,6 +67,7 @@ function gpt_test(callback) {
 		}
 	});
 }
+
 function main() {
 	var record = {};
 
@@ -84,6 +84,7 @@ function main() {
 			heartbit(record, function(err, data) {
 				if (err) {
 					console.log(err);
+					setTimeout(main, 5000);
 				} else {
 					console.log(data);
 					console.log(data.sn + ", " + data.ip + ", " + data.cmd);
