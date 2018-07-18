@@ -3,33 +3,21 @@ var app = require("../clients");
 var args = process.argv.splice(2);
 
 global.config = {"netdev": args[0], "serverip": args[1], "port": args[2]};
+var res = 0;
 
-function check_param(config, callback) {
-	if (global.config.netdev != undefined) {
-		callback(null, null);
-	} else {
-		callback("undefined", "netdev");
-	}
+if (global.config.netdev == undefined)
+	res++;
 
-	if (global.config.serverip != undefined) {
-		callback(null, null);
-	} else {
-		callback("undefined", "serverip");
-	}
+if (global.config.serverip == undefined)
+	res++;
 
-	if (global.config.port != undefined) {
-		callback(null, null);
-	} else {
-		callback("undefined", "port");
-	}
+if (global.config.port == undefined)
+	res++;
+
+if (res > 0) {
+	console.log("node bin/start netdev serverip port or bin/start netdev serverip port");
+} else {
+	console.log("param: ");
+	console.log(args);
+	app.main();
 }
-
-check_param(global.config, function (err, data) {
-	if (err) {
-		console.log("node bin/start netdev serverip port or bin/start netdev serverip port");
-	} else {
-		console.log("param: ");
-		console.log(args);
-		app.main();
-	}
-});
