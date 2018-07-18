@@ -75,22 +75,55 @@ int get_local_ip(const char *eth_inf, char *ip)
 	return 0;
 }
 
+void do_help(void)
+{
+	printf("netiface usage\n");
+	printf("\t-i\t\t get ip address\n");
+	printf("\t-m\t\t get mac address\n");
+	printf("\t-d\t\t specific net device\n");
+}
+
+#define OPT_IP		0x5a
+#define OPT_MAC		0x5b
+
 int main(int argc, char *argv[])
 {
-	char ip[1024];
 	int opt;
-	while ((opt = getopt(argc,argv,"im")) != -1) {
+	char data[1024];
+	char ethname[100];
+	int type = OPT_IP;
+	int deven = 0;
+	while ((opt = getopt(argc,argv,"imd:")) != -1) {
 		switch (opt) {
+		case 'd':
+			memcpy(ethname, optarg, strlen(optarg));
+			deven = 1;
+			break;
 		case 'i':
-			get_local_ip("wlp5s0", ip);
-			printf("%s\n", ip);
+			type = OPT_IP;
 			break;
 
 		case 'm':
-			get_local_mac("wlp5s0", ip);
-			printf("%s\n", ip);
+			type = OPT_MAC;
 			break;
 		}
 	}
+
+	if (!deven) {
+		do_help();
+		return -1;
+	}
+
+	switch (type) {
+	case OPT_IP:
+		get_local_ip(ethname, data);
+		printf("%s\n", data);
+		break;
+	case OPT_MAC:
+		get_local_mac(ethname, data);
+		printf("%s\n", data);
+		break;
+	}
+
 	return 0;
 }
