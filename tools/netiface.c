@@ -89,8 +89,8 @@ void do_help(void)
 int main(int argc, char *argv[])
 {
 	int opt;
-	char data[1024];
-	char ethname[100];
+	char data[1024] = {0};
+	char ethname[100] = {0};
 	int type = OPT_IP;
 	int deven = 0;
 	while ((opt = getopt(argc,argv,"imd:")) != -1) {
