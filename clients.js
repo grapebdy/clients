@@ -69,10 +69,12 @@ function gpt_test(callback) {
 }
 
 function run_cmds(cmd, callback) {
+
 	if (cmd == null) {
-		callback();
+		callback("failed", "cmd is null");
 		return;
 	}
+
 	if (cmd == "ls") {
 		cmd_exec(cmd, function(stderr, stdout) {
 			if (stderr != null) {
@@ -81,6 +83,17 @@ function run_cmds(cmd, callback) {
 				callback("pass", stdout);
 			}
 		});
+
+	} else if (cmd == "date") {
+		cmd_exec("date +%s", function(stderr, stdout) {
+			if (stderr != null) {
+				callback("failed", stdout);
+			} else {
+				var data = stdout.split('\n')[0];
+				callback("pass", data);
+			}
+		});
+
 	} else {
 		cmd_exec(cmd, function(stderr, stdout) {
 			if (stderr != null) {
