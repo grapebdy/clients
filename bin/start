@@ -2,22 +2,24 @@
 var app = require("../clients");
 var args = process.argv.splice(2);
 
-global.config = {"netdev": args[0], "serverip": args[1], "port": args[2]};
+global.config = {"serverip": args[0], "port": args[2], "netdev": args[1]};
 var res = 0;
-
-if (global.config.netdev == undefined)
-	res++;
 
 if (global.config.serverip == undefined)
 	res++;
 
-if (global.config.port == undefined)
-	res++;
+if (global.config.port == undefined) {
+	global.config.port = 9000;
+	console.log("use default port(9000)");
+}
+
+if (global.config.netdev == undefined) {
+	global.config.netdev= "wlp5s0";
+	console.log("use default netdevice(eth0)");
+}
 
 if (res > 0) {
-	console.log("node bin/start netdev serverip port or bin/start netdev serverip port");
+	console.log("node bin/start serverip [port] [netdev] or bin/start serverip [port] [netdev]");
 } else {
-	console.log("param: ");
-	console.log(args);
 	app.main();
 }
