@@ -2,7 +2,7 @@
 var app = require("../clients");
 var args = process.argv.splice(2);
 
-global.config = {"serverip": args[0], "port": args[2], "netdev": args[1]};
+global.config = {"serverip": args[0], "port": args[1], "netdev": args[2]};
 var res = 0;
 
 if (global.config.serverip == undefined)

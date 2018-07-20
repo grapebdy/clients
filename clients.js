@@ -3,6 +3,16 @@ var async = require('async');
 var request = require('request');
 var exec = require('child_process').exec;
 
+function config(path, callback) {
+	var data = fs.readFileSync(path, "utf-8");
+	console.log(data);
+	console.log(data.port);
+	jdata = JSON.stringify(data),
+	console.log(jdata);
+	callback(null, data);
+}
+exports.config= config;
+
 function cmd_exec(cmd, callback) {
 	exec(cmd, {maxBuffer:1024*1920}, function (err, stdout, stderr) {
 		if (err) {
