@@ -38,7 +38,7 @@ function heartbit(data, callback) {
 		if (!err && res.statusCode == 200) {
 			callback(null, body);
 		} else {
-			callback("responce err", null);
+			callback("please check server startup", null);
 		}
 	});
 }

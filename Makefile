@@ -19,7 +19,10 @@ bin/%.o: tools/%.c
 	$(CC)  -c -o $@ $<
 
 run: tools
-	@./bin/start
+	@./bin/start localhost
+
+help:
+	@echo "./bin/start ipaddr port netdev"
 
 clean:
 	@rm -rf $(OBJS)
